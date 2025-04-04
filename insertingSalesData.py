@@ -14,6 +14,7 @@ engine = sa.create_engine("sqlite:///DB/sales.db")
 session = orm.sessionmaker(bind=engine)
 session = session()
 
+#tbSeller
 for i in range(len(tbSeller)):
     data_seller = sls.seller(
         register_seller = int(tbSeller['register_seller'][i]),
@@ -28,4 +29,32 @@ for i in range(len(tbSeller)):
     except ValueError:
         ValueError()
 
-print("Seller inserted on tbSeller")    
+print("Seller inserted on tbSeller")
+
+#tbProduct
+product = pd.read_excel(address + "products.ods")
+tbProduct = pd.DataFrame(product)
+
+conn = engine.connect()
+
+metadata = sa.schema.MetaData()
+#
+DataProduct = tbProduct.to_dict(orient="records")
+
+tableProduct = sa.Table(sls.product.__tablename__, metadata, autoload_with=engine)
+print(tbProduct)
+print(DataProduct[0])
+print(DataProduct[1])
+print(DataProduct[2])
+print(DataProduct[3])
+print(tableProduct)
+
+try:
+    conn.execute(tableProduct.insert(), DataProduct)
+    session.commit()
+except ValueError:
+    ValueError()
+
+print("Seller inserted on tbProduct")
+
+session.close_all()
