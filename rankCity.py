@@ -25,7 +25,7 @@ rankCity= pd.DataFrame(
     ).group_by(
         oc.municipality.city
     ).order_by(
-        sa.func.sum(oc.occurrences.qtde).label("Amount of occurrences").desc()
+        sa.func.sum(oc.occurrences.qtde).desc()
     ).all()
 )
 
